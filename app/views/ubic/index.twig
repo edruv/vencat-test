@@ -46,10 +46,8 @@
 				<td>{{ubic.ubicacion}}</td>
 				<td>
 					<div class="btn-group btn-group-sm act" role="group" aria-label="Extra-small button group">
-						<a href="ubicacion/edit/{{ubic.id}}" class="btn btn-primary" title="Editar"><i class="fa fa-pencil"></i></a>
-						<a href="ubicacion/delete/{{ubic.id}}" class="btn btn-danger" title="Eliminar"><i class="fa fa-trash"></i></a>
-						<a href="{{ubic.id}}" class="btn btn-success" title="Eliminar"><i class="fa fa-trash"></i></a>
-						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal">Small modal</button>
+						<a href="ubicacion/editar/{{ubic.id}}" class="btn btn-primary" title="Editar"><i class="fa fa-pencil"></i></a>
+						<button type="button" class="btn btn-danger" name="{{ubic.id}}" data-toggle="modal" data-target="#modal" title="Eliminar"><i class="fa fa-trash"></i></button>
 					</div>
 				</td>
 			</tr>
@@ -64,38 +62,57 @@
 				<td>amet</td>
 				<td>consectetur</td>
 			</tr>
-			<tr>
-				<td>1,003</td>
-				<td>Integer</td>
-				<td>nec</td>
-			</tr>
-			<tr>
-				<td>1,003</td>
-				<td>libero</td>
-				<td>Sed</td>
-			</tr>
 		</tbody>
 	</table>
+</div>
+{% endblock %}
+{% block htmlxtra %}
+<div class="modal fade" id="modal" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title">Eliminar ubicacion?</h4>
+			</div>
+			<div class="modal-body">
+				<p>Deseas borrar la ubicacion "<strong></strong>"?</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+				<!-- <button type="button" class="btn btn-danger"></button> -->
+				<a href="" class="btn btn-danger"><i class="fa fa-trash"></i> Eliminar</a>
+			</div>
+		</div>
+	</div>
 </div>
 {% endblock %}
 {% block js %}
 <script type="text/javascript">
 $(document).ready(function() {
-	$('.act .btn-success').on('click', function(e) {
-		e.preventDefault();
-		var id = $(this).attr('href');
+	$('.act .btn-danger').on('click', function(e) {
+		// e.preventDefault();
+		var id = $(this).attr('name');
 		$.ajax({
 			url: '/vencat/ubicacion/getone/',
-			type: 'POST',
-			data: {id:id}
+			type: 'GET',
+			data: {id: (id)}
 		})
-		.done(function(ubic) {
-			console.log(ubic);
+		.done(function(data) {
+			data = JSON.parse(data);
+			if (data !='false') {
+				$('#modal .modal-body strong').append(data.ubicacion.toUpperCase());
+				$('#modal .modal-footer a').attr('href', '/vencat/ubicacion/remove/'+data.id);
+			}else {
+				console.log('no hay info');
+			}
 		})
-		.fail(function(ubic) {
-			console.log("Error:" + ubic);
+		.fail(function() {
+			console.log("error");
 		});
-
+		$(".modal").on("hidden.bs.modal", function(){
+			$(".modal-footer a").attr('href', '');
+			$(".modal-body strong").html("");
+		});
 	});
 });
 </script>
