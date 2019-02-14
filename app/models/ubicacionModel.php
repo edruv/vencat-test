@@ -21,7 +21,12 @@
 		}
 
 		public function getone($id){
-			$id = $_GET['id'];
+			if (strpos($id,'?') === false) {
+				$id = $id;
+			} else {
+				$id = $_GET['id'];
+			}
+
 			// print_r($id);
 			$stmt = $this->db->prepare("SELECT * from ubicacion where id=:id");
 			$stmt->execute(array(':id'=> $id));
