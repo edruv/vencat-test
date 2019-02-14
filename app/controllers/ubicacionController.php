@@ -21,14 +21,14 @@
 		public function crear(){
 			$title = 'Nueva Ubicacion';
 
-			$resources = '../'.PATH_RESOURCES;
+			$resources = '/'.PATH_FOLDER.PATH_RESOURCES;
 			$create = 'add';
 			echo $this->twig->render('add.twig',compact('resources','title','create'));
 		}
 
 		public function add($request_params){
 			$title = 'Nueva Ubicacion';
-			$resources = '../'.PATH_RESOURCES;
+			$resources = '/'.PATH_FOLDER.PATH_RESOURCES;
 			$create = 'add';
 
 			if (!self::verefy($request_params)) {
@@ -53,6 +53,16 @@
 			// $ubic = $this->model->getone($id['id']);
 			$ubic = $this->model->getone($id);
 			echo json_encode($ubic);
+		}
+
+		public function editar($id){
+			$id = $this->model->getone($id);
+
+			$title = 'Editar Ubicacion';
+			$resources = '/'.PATH_FOLDER.PATH_RESOURCES;
+			$create = '/'.PATH_FOLDER.'ubicacion/edit/'.$id['id'];
+
+			echo $this->twig->render('edit.twig',compact('resources','title','create','id'));
 		}
 
 		public function verefy($rp){
