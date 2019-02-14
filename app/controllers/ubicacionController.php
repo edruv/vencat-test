@@ -47,9 +47,11 @@
 		}
 
 		public function getone($id){
+			// print_r($id);
 			// $ubic = $this->model->getone($id);
 			// print_r(json_encode($this->model->getone($id)));
-			$ubic = $this->model->getone($id['id']);
+			// $ubic = $this->model->getone($id['id']);
+			$ubic = $this->model->getone($id);
 			echo json_encode($ubic);
 		}
 

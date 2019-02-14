@@ -21,6 +21,7 @@
 		}
 
 		public function getone($id){
+			$id = $_GET['id'];
 			// print_r($id);
 			$stmt = $this->db->prepare("SELECT * from ubicacion where id=:id");
 			$stmt->execute(array(':id'=> $id));
